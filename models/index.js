@@ -1,3 +1,4 @@
+const Comment = require('./comment')
 const Vote = require('./Vote');
 const Post = require('./Post');
 const User = require('./User');
@@ -12,7 +13,8 @@ Post.belongsTo(User, {
 });
 
 User.belongsToMany(Post, {
-    through: vote,
+    through: Vote,
+    as: 'voted_posts',
     foreignKey: 'user_id'
 });
 
@@ -22,4 +24,20 @@ Post.belongsToMany(User, {
     foreignKey: 'post_id'
 });
 
-module.exports = { User, Post };
+Comment.belongsTo(User, {
+    foreignKey: 'user_id'
+});
+
+Comment.belongsTo(Post, {
+    foreignKey: 'post_id'
+});
+
+User.hasMany(Comment, {
+    foreignKey: 'user_id'
+});
+
+Post.hasMany(Comment, {
+    foreignKey: 'post_id'
+});
+
+module.exports = { User, Post, Vote, Comment };
